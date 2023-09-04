@@ -6,11 +6,7 @@
 char index[27] = {' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 //generamos un indice comun para que los dos programas tengan un codigo comun
 
-int bA;           //los 5 bits que se usan para comunicar el caracter, guardados en variables diferentes bA siendo el dijito de mallor importancia
-int bB;
-int bC;
-int bD;
-int bE;
+int data[5];      //los bits son guardados en un array envez de variables apaartes para optimizar i facilitar la expansion
 
 char caracter;    //el caracter que escribiremos al puerto serie
 int numeroLetra;  //el el numero que se le asignara al caracter para hacer la conversion a binaria
@@ -35,76 +31,46 @@ void loop() {                            //la conversion del caracter a un numer
 
     }                                   //la conversion de el numero del caracter a binario para mandar los pulsos
     if(numeroLetra >= 16){
-      bA = 1;
+      data[5] = 1;
     }else{
-      bA = 0;
+      data[5] = 0;
     }
-    if(numeroLetra >= 16 * bA + 8){
-      bB = 1;
+    if(numeroLetra >= 16 * data[5] + 8){
+      data[4] = 1;
     }else{
-      bB = 0;
+      data[4] = 0;
     }
-    if(numeroLetra >= 16 * bA + 8 * bB + 4){
-      bC = 1;
+    if(numeroLetra >= 16 * data[5] + 8 * data[4] + 4){
+      data[3] = 1;
     }else{
-      bC = 0;
+      data[3] = 0;
     }
-    if(numeroLetra >= 16 * bA + 8 * bB + 4 * bC + 2){
-      bD = 1;
+    if(numeroLetra >= 16 * data[5] + 8 * data[4] + 4 * data[3] + 2){
+      data[2] = 1;
     }else{
-      bD = 0;
+      data[2] = 0;
     }
-    if(numeroLetra >= 16 * bA + 8 * bB + 4 * bC + 2 * bD + 1){
-      bE = 1;
+    if(numeroLetra >= 16 * data[5] + 8 * data[4] + 4 * data[3] + 2 * data[2] + 1){
+      data[1] = 1;
     }else{
-      bE = 0;
+      data[1] = 0;
     }
     Serial.print(caracter);
     Serial.print('_');
-    Serial.print(bA);
-    Serial.print(bB);
-    Serial.print(bC);
-    Serial.print(bD);
-    Serial.println(bE);
 
                                           //se mandan los 5 pulsos corectos
-                                          
-    digitalWrite(dataPin, bA);
-    delay(delayDataClock);
-    digitalWrite(clockPin, HIGH);
-    delay(pulsetime);
-    digitalWrite(clockPin, LOW);
-    delay(delayClockData);
+    for(int i = 5; i >= 1; i = i-1) {
+      digitalWrite(dataPin, data[i]);
+      Serial.print(data[i]);
+      delay(delayDataClock);
+      digitalWrite(clockPin, HIGH);
+      delay(pulsetime);
+      digitalWrite(clockPin, LOW);
+      delay(delayClockData);
+    }
+    digitalWrite(dataPin, LOW);                                     
+     Serial.println();
 
-    digitalWrite(dataPin, bB);
-    delay(delayDataClock);
-    digitalWrite(clockPin, HIGH);
-    delay(pulsetime);
-    digitalWrite(clockPin, LOW);
-    delay(delayClockData);
-    
-    digitalWrite(dataPin, bC);
-    delay(delayDataClock);
-    digitalWrite(clockPin, HIGH);
-    delay(pulsetime);
-    digitalWrite(clockPin, LOW);
-    delay(delayClockData);
-    
-    digitalWrite(dataPin, bD);
-    delay(delayDataClock);
-    digitalWrite(clockPin, HIGH);
-    delay(pulsetime);
-    digitalWrite(clockPin, LOW);
-    delay(delayClockData);
-    
-    digitalWrite(dataPin, bE);
-    delay(delayDataClock);
-    digitalWrite(clockPin, HIGH);
-    delay(pulsetime);
-    digitalWrite(clockPin, LOW);
-    delay(delayClockData);
-
-    digitalWrite(dataPin, LOW);    
   }
 }
 
