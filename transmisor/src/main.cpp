@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 #define dataPin 4
-#define clockPin 5
+
 
 char index[27] = {' ','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
 //generamos un indice comun para que los dos programas tengan un codigo comun
@@ -11,9 +11,7 @@ int data[5];      //los bits son guardados en un array envez de variables apaart
 char caracter;    //el caracter que escribiremos al puerto serie
 int numeroLetra;  //el el numero que se le asignara al caracter para hacer la conversion a binaria
 
-int delayDataClock = 100; //la pausa que habra al mandar el pulso de reloj despues de que el bit de data se coloque
-int delayClockData = 100; //la pausa que habra despues del pulso para cambiar el bit de data
-int pulsetime = 10;
+int dataDelay = 500
 
 void setup() {
   pinMode(dataPin, OUTPUT);
@@ -58,15 +56,13 @@ void loop() {                            //la conversion del caracter a un numer
     Serial.print(caracter);
     Serial.print('_');
 
-                                          //se mandan los 5 pulsos corectos
+    digitalWrite(dataPin, HIGH);
+    delay(10);                                          //se mandan los 5 pulsos corectos
+    digitalWrite(dataPin, LOW);
+    
     for(int i = 5; i >= 1; i = i-1) {
-      digitalWrite(dataPin, data[i]);
-      Serial.print(data[i]);
-      delay(delayDataClock);
-      digitalWrite(clockPin, HIGH);
-      delay(pulsetime);
-      digitalWrite(clockPin, LOW);
-      delay(delayClockData);
+      digitalWrite(dataPin, data);
+      delay(dataDelay)
     }
     digitalWrite(dataPin, LOW);                                     
      Serial.println();
